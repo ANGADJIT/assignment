@@ -9,8 +9,9 @@ class TasksLoading extends TasksState {}
 
 class TasksFetched extends TasksState {
   final List<TasksModel> tasks;
-  
-  TasksFetched({
-    required this.tasks,
-  });
+  final int displayAbleCount;
+
+  TasksFetched({required this.tasks, required this.displayAbleCount});
 }
+
+class TasksError extends TasksState {}

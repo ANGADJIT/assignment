@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -37,4 +38,16 @@ void showSnackbar(
       content: message.text.hexColor(Vx.whiteHex).semiBold.make());
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+/// internet checker
+Future<bool> checkForInternet() async {
+  final result = await Connectivity().checkConnectivity();
+
+  if (result == ConnectivityResult.mobile ||
+      result == ConnectivityResult.wifi) {
+    return true;
+  }
+
+  return false;
 }

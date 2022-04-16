@@ -1,7 +1,5 @@
-import 'package:assignment_app/data/models/tasks_model.dart';
-import 'package:assignment_app/logic/database/task_db.dart';
 import 'package:assignment_app/presentation/pages/add_task.dart';
-import 'package:assignment_app/utils/functions.dart';
+import 'package:assignment_app/presentation/pages/view_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -55,18 +53,21 @@ class _HomeState extends State<Home> {
               .hexColor(Vx.grayHex300)
               .make(),
           (context.screenHeight * .04).heightBox,
-          VxBox(
-                  child: 'view -> -> '
-                      .text
-                      .bold
-                      .hexColor(Vx.whiteHex)
-                      .makeCentered())
-              .size(context.screenWidth * .3, context.screenHeight * .04)
-              .roundedLg
-              .hexColor('#d9ed80')
-              .shadow2xl
-              .make()
-              .px(context.screenWidth * .02)
+          MaterialButton(
+            onPressed: () => context.nextPage(const ViewTasks()),
+            child: VxBox(
+                    child: 'view -> -> '
+                        .text
+                        .bold
+                        .hexColor(Vx.whiteHex)
+                        .makeCentered())
+                .size(context.screenWidth * .3, context.screenHeight * .04)
+                .roundedLg
+                .hexColor('#d9ed80')
+                .shadow2xl
+                .make()
+                .px(context.screenWidth * .02),
+          )
         ]))
             .size(context.screenWidth * .9, context.screenHeight * .17)
             .roundedSM
@@ -78,8 +79,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Vx.hexToColor('#d9ed80'),
         onPressed: () async {
-          await TasksDb().getData();
-          // context.nextPage(const AddTask());
+          context.nextPage(const AddTask());
         },
         child: Icon(
           Icons.task,

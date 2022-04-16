@@ -20,20 +20,33 @@ class _AddTaskState extends State<AddTask> {
   final TasksDb _tasksDb = TasksDb();
 
   Future<void> _addTask() async {
-    // validate data first
-    if (_time == null || _task.text.isEmpty) {
-      showSnackbar(
-          context: context, message: 'error: fields required..', isError: true);
+    final result = await checkForInternet();
+
+    if (result) {
+      // validate data first
+      if (_time == null || _task.text.isEmpty) {
+        showSnackbar(
+            context: context,
+            message: 'error: fields required..',
+            isError: true);
+      } else {
+        TasksModel task = TasksModel(
+            id: _task.text,
+            dueDate: _time!,
+            status: _isCompleted,
+            upperKey: '',
+            lowerKey: '');
+
+        await loading('Uploading tasks...');
+        await _tasksDb.addTask(task);
+        await loading('', show: false);
+
+        showSnackbar(context: context, message: 'Uploaded successfully');
+        context.pop();
+      }
     } else {
-      TasksModel task =
-          TasksModel(id: _task.text, dueDate: _time!, status: _isCompleted);
-
-      await loading('Upoading tasks...');
-      await _tasksDb.addTask(task);
-      await loading('', show: false);
-
-      showSnackbar(context: context, message: 'Uploaded successfully');
-      context.pop();
+      showSnackbar(
+          context: context, message: 'erorr: no internet', isError: true);
     }
   }
 
