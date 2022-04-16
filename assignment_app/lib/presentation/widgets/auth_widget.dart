@@ -67,8 +67,9 @@ class AuthWidget extends StatelessWidget {
             final String email = _email.text;
             final String password = _password.text;
             Failure failure = Failure('init-failure');
-            AuthDataModel authDataModel =
-                AuthDataModel(userName: '', email: '');
+            AuthDataModel authDataModel = AuthDataModel(
+              userName: '',
+            );
 
             if (isLogin) {
               await loading('logging in');
@@ -79,7 +80,9 @@ class AuthWidget extends StatelessWidget {
 
               if (result.isRight()) {
                 await _sessionDb.setSession();
-                pageContext.nextAndRemoveUntilPage(const Home());
+                pageContext.nextAndRemoveUntilPage(Home(
+                  userName: authDataModel.userName,
+                ));
               } else {
                 showSnackbar(
                     context: context,
@@ -96,7 +99,9 @@ class AuthWidget extends StatelessWidget {
 
               if (result.isRight()) {
                 await _sessionDb.setSession();
-                pageContext.nextAndRemoveUntilPage(const Home());
+                pageContext.nextAndRemoveUntilPage(Home(
+                  userName: authDataModel.userName,
+                ));
               } else {
                 showSnackbar(
                     context: context,

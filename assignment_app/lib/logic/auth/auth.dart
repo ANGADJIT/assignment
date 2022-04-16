@@ -6,6 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Auth {
   late final FirebaseAuth _instance;
 
+  /// This is for extracting user name from email
+  String getUserNameFromEmail(String email) {
+    return email.split('.')[0];
+  }
+
   Auth() {
     _instance = FirebaseAuth.instance;
   }
@@ -26,10 +31,9 @@ class Auth {
       return Left(Failure(e.code));
     }
 
-    String? userName = credential.user!.displayName;
     String? userEmail = credential.user!.email;
 
-    return Right(AuthDataModel(userName: '', email: userEmail!));
+    return Right(AuthDataModel(userName: getUserNameFromEmail(userEmail!)));
   }
 
   /// For authencating existing users using email and password
@@ -48,10 +52,11 @@ class Auth {
       return Left(Failure(e.code));
     }
 
-    String? userName = credential.user!.displayName;
     String? userEmail = credential.user!.email;
 
-    return Right(AuthDataModel(userName: '', email: userEmail!));
+    return Right(AuthDataModel(
+      userName: getUserNameFromEmail(userEmail!),
+    ));
   }
 
   /// For checking that is log in or not

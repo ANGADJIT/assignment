@@ -3,6 +3,7 @@ import 'package:assignment_app/logic/database/session_db.dart';
 import 'package:assignment_app/presentation/pages/auth_page.dart';
 import 'package:assignment_app/presentation/pages/home.dart';
 import 'package:assignment_app/utils/functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -24,8 +25,13 @@ class _AuthDeciderState extends State<AuthDecider> {
     if (status) {
       _sessionDb.isUserInSession().then((value) {
         if (value) {
+          final email = FirebaseAuth.instance.currentUser!.email;
+
           navigateToPageWhileContextBuilding(
-              context: context, page: const Home());
+              context: context,
+              page: Home(
+                userName: _auth.getUserNameFromEmail(email!),
+              ));
         } else {
           _auth.logOut().then((value) {
             navigateToPageWhileContextBuilding(

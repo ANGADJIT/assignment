@@ -46,12 +46,17 @@ dependencies:
   # ui packages 
   velocity_x:
   flutter_easyloading: ^3.0.3
+  custom_radio_grouped_button: ^2.1.2
 
   # for functional programming
   dartz: ^0.10.1
 
   # for storing key:pair values
   shared_preferences: ^2.0.13
+
+  # state management library
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:
