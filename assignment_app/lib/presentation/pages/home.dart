@@ -1,3 +1,4 @@
+import 'package:assignment_app/presentation/pages/add_expense_income.dart';
 import 'package:assignment_app/presentation/pages/add_task.dart';
 import 'package:assignment_app/presentation/pages/view_tasks.dart';
 import 'package:flutter/material.dart';
@@ -76,16 +77,30 @@ class _HomeState extends State<Home> {
             .border(color: Vx.hexToColor('#d9ed80'))
             .makeCentered()
       ])),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Vx.hexToColor('#d9ed80'),
-        onPressed: () async {
-          context.nextPage(const AddTask());
-        },
-        child: Icon(
-          Icons.task,
-          color: Vx.hexToColor(Vx.whiteHex),
-        ),
-      ).px(context.screenWidth * .02),
+      floatingActionButton: HStack([
+        FloatingActionButton(
+          heroTag: 'btn1',
+          backgroundColor: Vx.hexToColor('#d9ed80'),
+          onPressed: () {
+            context.nextPage(const AddTask());
+          },
+          child: Icon(
+            Icons.task,
+            color: Vx.hexToColor(Vx.whiteHex),
+          ),
+        ).px(context.screenWidth * .02),
+        FloatingActionButton(
+          heroTag: 'btn2',
+          backgroundColor: Vx.hexToColor(Vx.indigoHex300),
+          onPressed: () {
+            context.nextPage(AddIncomeExpenses());
+          },
+          child: Icon(
+            Icons.attach_money,
+            color: Vx.hexToColor(Vx.whiteHex),
+          ),
+        ).px(context.screenWidth * .02)
+      ]),
     );
   }
 }

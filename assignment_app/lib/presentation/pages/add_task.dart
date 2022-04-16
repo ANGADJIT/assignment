@@ -46,7 +46,7 @@ class _AddTaskState extends State<AddTask> {
       }
     } else {
       showSnackbar(
-          context: context, message: 'erorr: no internet', isError: true);
+          context: context, message: 'error: no internet', isError: true);
     }
   }
 

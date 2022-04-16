@@ -62,7 +62,7 @@ class _UpdateTaskState extends State<UpdateTask> {
       }
     } else {
       showSnackbar(
-          context: context, message: 'erorr: no internet', isError: true);
+          context: context, message: 'error: no internet', isError: true);
     }
   }
 
