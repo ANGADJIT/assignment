@@ -17,7 +17,24 @@ class AddIncomeExpenses extends StatelessWidget {
     final result = await checkForInternet();
 
     if (result) {
-      if(_ex.)
+      if (_expenses.text.isEmpty || _income.text.isEmpty) {
+        showSnackbar(
+            context: context,
+            message: 'error : fields required..',
+            isError: true);
+      } else {
+        final _model = ExpensesIncomeModel(
+            expenses: int.parse(_expenses.text),
+            income: int.parse(_income.text));
+
+        await loading('Saving...');
+        await _expensesIncomeDb.add(_model);
+        await loading('', show: false);
+
+        //
+        showSnackbar(context: context, message: 'Saved successfully..');
+        context.pop();
+      }
     } else {
       showSnackbar(
           context: context, message: 'error: no internet', isError: true);

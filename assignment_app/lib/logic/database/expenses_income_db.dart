@@ -17,4 +17,23 @@ class ExpensesIncomeDb {
         .collection('income_expenses')
         .add(incomeModel.toMap());
   }
+
+  /// This get income and expenses from database
+  ///
+  /// And return as List of [ExpensesIncomeDb]
+  Future<List<ExpensesIncomeModel>> getExpenses() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final result = await _instance.doc(uid).collection('income_expenses').get();
+    final expenses = result.docs;
+
+    final List<ExpensesIncomeModel> modeledExpenses = [];
+
+    for (var expense in expenses) {
+      final map = expense.data();
+      modeledExpenses.add(ExpensesIncomeModel.fromMap(map));
+    }
+
+    return modeledExpenses;
+  }
 }
