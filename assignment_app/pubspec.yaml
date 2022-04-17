@@ -47,7 +47,7 @@ dependencies:
   velocity_x:
   flutter_easyloading: ^3.0.3
   custom_radio_grouped_button: ^2.1.2
-  syncfusion_flutter_charts: ^20.1.48
+  fl_chart: ^0.50.1
 
   # for functional programming
   dartz: ^0.10.1

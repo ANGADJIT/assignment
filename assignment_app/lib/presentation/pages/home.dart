@@ -1,6 +1,7 @@
 import 'package:assignment_app/logic/database/expenses_income_db.dart';
 import 'package:assignment_app/presentation/pages/add_expense_income.dart';
 import 'package:assignment_app/presentation/pages/add_task.dart';
+import 'package:assignment_app/presentation/pages/insights.dart';
 import 'package:assignment_app/presentation/pages/view_tasks.dart';
 import 'package:assignment_app/presentation/pages/visualize_expenses.dart';
 import 'package:assignment_app/utils/functions.dart';
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
             .make(),
       ),
       body: SafeArea(
-          child: VStack([
+          child: ListView(children: [
         (context.screenHeight * .02).heightBox,
         VxBox(
                 child: VStack([
@@ -58,7 +59,7 @@ class _HomeState extends State<Home> {
               .bold
               .hexColor(Vx.grayHex300)
               .make(),
-          (context.screenHeight * .04).heightBox,
+          (context.screenHeight * .02).heightBox,
           MaterialButton(
             onPressed: () => context.nextPage(const ViewTasks()),
             child: VxBox(
@@ -90,14 +91,23 @@ class _HomeState extends State<Home> {
               .bold
               .hexColor(Vx.grayHex300)
               .make(),
-          (context.screenHeight * .04).heightBox,
+          (context.screenHeight * .02).heightBox,
           MaterialButton(
             onPressed: () async {
-              await loading('Getting data...');
-              final models = await _expensesIncomeDb.getExpenses();
-              await loading('', show: false);
+              final result = await checkForInternet();
 
-              context.nextPage(VisualizeExpenses(models: models));
+              if (result) {
+                await loading('Getting data...');
+                final models = await _expensesIncomeDb.getExpenses();
+                await loading('', show: false);
+
+                context.nextPage(VisualizeExpenses(models: models));
+              } else {
+                showSnackbar(
+                    context: context,
+                    message: 'error: no internet',
+                    isError: true);
+              }
             },
             child: VxBox(
                     child: 'view -> -> '
@@ -128,9 +138,45 @@ class _HomeState extends State<Home> {
               .bold
               .hexColor(Vx.grayHex300)
               .make(),
-          (context.screenHeight * .04).heightBox,
+          (context.screenHeight * .02).heightBox,
           MaterialButton(
-            onPressed: () {},
+            onPressed: () async {
+              final result = await checkForInternet();
+
+              if (result) {
+                await loading('Getting data...');
+                final models = await _expensesIncomeDb.getExpenses();
+                await loading('', show: false);
+
+                int expenses =
+                    models.sum((p0) => p0.expenses + p0.expenses) as int;
+                int income = models.sum((p0) => p0.income + p0.income) as int;
+
+                double amount = (income - expenses) / income ;
+
+                String text = '';
+
+                if ((expenses / 100.0) > (income / 100.0)) {
+                  text = 'You are spending too much money';
+                } else {
+                  text = 'Good job. You are saving $amount of your income';
+                }
+
+                context.nextPage(Insights(
+                    values: [income.toDouble(), expenses.toDouble()],
+                    text: text,
+                    amount: amount.toDouble(),
+                    color: [
+                      Vx.hexToColor(Vx.indigoHex400),
+                      Vx.hexToColor(Vx.pinkHex400)
+                    ]));
+              } else {
+                showSnackbar(
+                    context: context,
+                    message: 'error: no internet',
+                    isError: true);
+              }
+            },
             child: VxBox(
                     child: 'view -> -> '
                         .text

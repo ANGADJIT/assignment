@@ -89,13 +89,49 @@ class _ViewTasksState extends State<ViewTasks> {
                 itemBuilder: (_, index) {
                   return GestureDetector(
                       onLongPress: () async {
-                        await loading('deleting...');
-                        _cubit.deleteData(state.tasks[index].refrence!);
-                        await loading('', show: false);
-                        //
-                        showSnackbar(
+                        showBottomSheet(
                             context: context,
-                            message: 'deleted successfully..');
+                            builder: (context) {
+                              return ListTile(
+                                title: 'Do you want delete this task ??'
+                                    .text
+                                    .headline6(context)
+                                    .bold
+                                    .hexColor(Vx.indigoHex500)
+                                    .makeCentered(),
+                                trailing: IconButton(
+                                    onPressed: () async {
+                                      final result = await checkForInternet();
+
+                                      if (result) {
+                                        await loading('deleting...');
+                                        _cubit.deleteData(
+                                            state.tasks[index].refrence!);
+                                        await loading('', show: false);
+                                        //
+                                        showSnackbar(
+                                            context: context,
+                                            message: 'deleted successfully..');
+                                        context.pop();
+                                      } else {
+                                        showSnackbar(
+                                            context: context,
+                                            message: 'error: no internet',
+                                            isError: true);
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Vx.hexToColor(Vx.redHex400),
+                                    )),
+                              )
+                                  .box
+                                  .rounded
+                                  .hexColor(Vx.whiteHex)
+                                  .size(context.screenWidth,
+                                      context.screenHeight * .07)
+                                  .make();
+                            });
                       },
                       onTap: () {
                         context.nextPage(UpdateTask(
@@ -142,9 +178,9 @@ class _ViewTasksState extends State<ViewTasks> {
                     .box
                     .rounded
                     .hexColor(Vx.whiteHex)
-                    .size(context.screenWidth * .9, context.screenHeight * .1)
+                    .size(context.screenWidth * .9, context.screenHeight * .13)
                     .make()
-                    .py(context.screenWidth * .02),
+                    .py(context.screenWidth * .021),
               )
             ]);
           } else if (state is TasksError) {
