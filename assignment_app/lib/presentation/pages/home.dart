@@ -101,7 +101,11 @@ class _HomeState extends State<Home> {
                 final models = await _expensesIncomeDb.getExpenses();
                 await loading('', show: false);
 
-                context.nextPage(VisualizeExpenses(models: models));
+                if (models.isNotEmpty) {
+                  context.nextPage(VisualizeExpenses(models: models));
+                } else {
+                  showSnackbar(context: context, message: 'No data found');
+                }
               } else {
                 showSnackbar(
                     context: context,
@@ -148,28 +152,32 @@ class _HomeState extends State<Home> {
                 final models = await _expensesIncomeDb.getExpenses();
                 await loading('', show: false);
 
-                int expenses =
-                    models.sum((p0) => p0.expenses + p0.expenses) as int;
-                int income = models.sum((p0) => p0.income + p0.income) as int;
+                if (models.isNotEmpty) {
+                  int expenses =
+                      models.sum((p0) => p0.expenses + p0.expenses) as int;
+                  int income = models.sum((p0) => p0.income + p0.income) as int;
 
-                double amount = (income - expenses) / income ;
+                  double amount = (income - expenses) / income;
 
-                String text = '';
+                  String text = '';
 
-                if ((expenses / 100.0) > (income / 100.0)) {
-                  text = 'You are spending too much money';
+                  if ((expenses / 100.0) > (income / 100.0)) {
+                    text = 'You are spending too much money';
+                  } else {
+                    text = 'Good job. You are saving $amount of your income';
+                  }
+
+                  context.nextPage(Insights(
+                      values: [income.toDouble(), expenses.toDouble()],
+                      text: text,
+                      amount: amount.toDouble(),
+                      color: [
+                        Vx.hexToColor(Vx.indigoHex400),
+                        Vx.hexToColor(Vx.pinkHex400)
+                      ]));
                 } else {
-                  text = 'Good job. You are saving $amount of your income';
+                  showSnackbar(context: context, message: 'No data found');
                 }
-
-                context.nextPage(Insights(
-                    values: [income.toDouble(), expenses.toDouble()],
-                    text: text,
-                    amount: amount.toDouble(),
-                    color: [
-                      Vx.hexToColor(Vx.indigoHex400),
-                      Vx.hexToColor(Vx.pinkHex400)
-                    ]));
               } else {
                 showSnackbar(
                     context: context,

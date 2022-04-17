@@ -61,7 +61,7 @@ class AuthWidget extends StatelessWidget {
 
       //
       ButtonWidget(
-          buttonText: 'Sign In',
+          buttonText: isLogin? 'Sign In' : 'Register',
           buttonColor: Vx.hexToColor('#dbfa54'),
           onPressed: () async {
             final String email = _email.text;
