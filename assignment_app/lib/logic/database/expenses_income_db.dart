@@ -34,6 +34,6 @@ class ExpensesIncomeDb {
       modeledExpenses.add(ExpensesIncomeModel.fromMap(map));
     }
 
-    return modeledExpenses;
+    return modeledExpenses.reversed.toList();
   }
 }

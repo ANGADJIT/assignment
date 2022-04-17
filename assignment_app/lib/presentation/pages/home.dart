@@ -2,6 +2,8 @@ import 'package:assignment_app/logic/database/expenses_income_db.dart';
 import 'package:assignment_app/presentation/pages/add_expense_income.dart';
 import 'package:assignment_app/presentation/pages/add_task.dart';
 import 'package:assignment_app/presentation/pages/view_tasks.dart';
+import 'package:assignment_app/presentation/pages/visualize_expenses.dart';
+import 'package:assignment_app/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -14,6 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final ExpensesIncomeDb _expensesIncomeDb = ExpensesIncomeDb();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +93,11 @@ class _HomeState extends State<Home> {
           (context.screenHeight * .04).heightBox,
           MaterialButton(
             onPressed: () async {
-              await ExpensesIncomeDb().getExpenses();
+              await loading('Getting data...');
+              final models = await _expensesIncomeDb.getExpenses();
+              await loading('', show: false);
+
+              context.nextPage(VisualizeExpenses(models: models));
             },
             child: VxBox(
                     child: 'view -> -> '
